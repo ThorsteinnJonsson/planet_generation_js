@@ -24,7 +24,7 @@ class Renderer extends Component {
     this.camera.position.z = 5;
 
     // Camera controls
-    // TODO
+    const controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     // Lights
     var lights = [];
@@ -60,8 +60,8 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    this.model.rotation.x += 0.005;
-    this.model.rotation.y += 0.03;
+    // this.model.rotation.x += 0.005;
+    this.model.rotation.y += 0.01;
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
