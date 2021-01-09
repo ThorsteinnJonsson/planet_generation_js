@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import * as THREE from "three";
+import OrbitControls from "three-orbitcontrols";
+import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 
 class Renderer extends Component {
 
