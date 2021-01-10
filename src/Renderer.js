@@ -21,7 +21,7 @@ class Renderer extends Component {
     // Add camera
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.z = 8;
-    this.camera.position.z = 5;
+    this.camera.position.y = 5;
 
     // Camera controls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -77,7 +77,9 @@ class Renderer extends Component {
     // Grid
     const size = 100;
     const divisions = 100;
-    const gridHelper = new THREE.GridHelper(size, divisions);
+    const centerLineColor = 0x888888;
+    const lineColor = 0x888888;
+    const gridHelper = new THREE.GridHelper(size, divisions, centerLineColor, lineColor);
     this.scene.add(gridHelper);
 
     this.renderScene();
