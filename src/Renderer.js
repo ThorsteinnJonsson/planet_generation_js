@@ -47,7 +47,7 @@ class Renderer extends Component {
     });
     this.model = new THREE.Mesh(bufferCubegeometry, material);
     this.scene.add(this.model);
-    this.model.position.set(-5,0,0);
+    this.model.position.set(-5, 0, 0);
 
     // Load model
     var mtlLoader = new MTLLoader();
@@ -60,19 +60,25 @@ class Renderer extends Component {
       var objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load("r2-d2.obj",
-      object => {
-        this.freedomMesh = object;
-        this.freedomMesh.position.setY(0);
-        this.freedomMesh.scale.set(0.02, 0.02, 0.02);
-        this.scene.add(this.freedomMesh);
-      },
-      xhr => {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-      },
-      error => {
-        console.log("An error happened" + error)
-      });
+        object => {
+          this.freedomMesh = object;
+          this.freedomMesh.position.setY(0);
+          this.freedomMesh.scale.set(0.02, 0.02, 0.02);
+          this.scene.add(this.freedomMesh);
+        },
+        xhr => {
+          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+        },
+        error => {
+          console.log("An error happened" + error)
+        });
     });
+
+    // Grid
+    const size = 100;
+    const divisions = 100;
+    const gridHelper = new THREE.GridHelper(size, divisions);
+    this.scene.add(gridHelper);
 
     this.renderScene();
     this.start();
