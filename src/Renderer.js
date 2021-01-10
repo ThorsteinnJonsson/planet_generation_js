@@ -24,7 +24,7 @@ class Renderer extends Component {
     this.camera.position.z = 5;
 
     // Camera controls
-    const controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
     // Lights
     var lights = [];
@@ -51,7 +51,7 @@ class Renderer extends Component {
 
     // Load model
     var mtlLoader = new MTLLoader();
-    mtlLoader.setPath("./public/");
+    mtlLoader.setPath("./public/"); // This doesn't seem to work?
     mtlLoader.load("r2-d2.mtl", materials => {
       materials.preload();
       console.log("Material loaded");
@@ -69,13 +69,10 @@ class Renderer extends Component {
       xhr => {
         console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
       },
-
       error => {
         console.log("An error happened" + error)
       });
-
     });
-
 
     this.renderScene();
     this.start();
