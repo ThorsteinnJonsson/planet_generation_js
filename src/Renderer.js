@@ -5,28 +5,17 @@ import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 
 class Renderer extends Component {
 
-  componentDidMount() {
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
-
-    this.scene = new THREE.Scene();
-
-    // Add renderer
-    this.renderer = new THREE.WebGLRenderer();
-    this.renderer.setClearColor("#263238");
-    this.renderer.setSize(width, height);
-    this.mount.appendChild(this.renderer.domElement);
-
-    // Add camera
+  setupCamera = (width, height) => {
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     this.camera.position.z = 8;
     this.camera.position.y = 5;
+  }
 
-    // Camera controls
+  setupControls = () => {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+  }
 
-    // Lights
+  setupLights = () => {
     var lights = [];
     lights[0] = new THREE.PointLight(0xffffff, 1, 0);
     lights[1] = new THREE.PointLight(0xffffff, 1, 0);
@@ -37,18 +26,9 @@ class Renderer extends Component {
     this.scene.add(lights[0]);
     this.scene.add(lights[1]);
     this.scene.add(lights[2]);
+  }
 
-
-    // Model
-    const bufferCubegeometry = new THREE.BoxBufferGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x00afff,
-      wireframe: false
-    });
-    this.model = new THREE.Mesh(bufferCubegeometry, material);
-    this.scene.add(this.model);
-    this.model.position.set(-5, 0, 0);
-
+  loadPlaceholderModel = () => {
     // Load model
     var mtlLoader = new MTLLoader();
     mtlLoader.setPath("./public/"); // This doesn't seem to work?
@@ -73,14 +53,51 @@ class Renderer extends Component {
           console.log("An error happened" + error)
         });
     });
+  }
 
-    // Grid
+  addModels = () => {
+    // Add cube
+    const bufferCubegeometry = new THREE.BoxBufferGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({
+      color: 0x00afff,
+      wireframe: false
+    });
+    this.model = new THREE.Mesh(bufferCubegeometry, material);
+    this.scene.add(this.model);
+    this.model.position.set(-5, 0, 0);
+
+    // Add placeholder model
+    this.loadPlaceholderModel();
+  }
+
+  addGrid = () => {
     const size = 100;
     const divisions = 100;
     const centerLineColor = 0x888888;
     const lineColor = 0x888888;
     const gridHelper = new THREE.GridHelper(size, divisions, centerLineColor, lineColor);
     this.scene.add(gridHelper);
+  }
+
+  componentDidMount() {
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    this.scene = new THREE.Scene();
+
+    // Add renderer
+    this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setClearColor("#263238");
+    this.renderer.setSize(width, height);
+    this.mount.appendChild(this.renderer.domElement);
+
+    this.setupCamera(width, height);
+    this.setupControls();
+    this.setupLights();
+
+    this.addModels();
+    this.addGrid();
 
     this.renderScene();
     this.start();
@@ -97,7 +114,6 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    // this.model.rotation.x += 0.005;
     this.model.rotation.y += 0.01;
 
     this.renderScene();
