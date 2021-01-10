@@ -40,9 +40,12 @@ class Renderer extends Component {
 
 
     // Model
-    var geometry = new THREE.BoxGeometry(1, 1, 1);
-    var material = new THREE.MeshBasicMaterial({ color: 0x00afff });
-    this.model = new THREE.Mesh(geometry, material);
+    const bufferCubegeometry = new THREE.BoxBufferGeometry(1,1,1);
+    const material = new THREE.MeshBasicMaterial({ 
+      color: 0x00afff,
+      wireframe: true
+    });
+    this.model = new THREE.Mesh(bufferCubegeometry, material);
     this.scene.add(this.model);
 
     this.renderScene();
