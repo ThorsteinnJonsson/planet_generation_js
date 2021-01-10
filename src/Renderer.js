@@ -28,7 +28,7 @@ class Renderer extends Component {
 
     // Lights
     var lights = [];
-    lights[0] = new THREE.PointLight(0x304ffe, 1, 0);
+    lights[0] = new THREE.PointLight(0xffffff, 1, 0);
     lights[1] = new THREE.PointLight(0xffffff, 1, 0);
     lights[2] = new THREE.PointLight(0xffffff, 1, 0);
     lights[0].position.set(0, 200, 0);
@@ -40,13 +40,42 @@ class Renderer extends Component {
 
 
     // Model
-    const bufferCubegeometry = new THREE.BoxBufferGeometry(1,1,1);
-    const material = new THREE.MeshBasicMaterial({ 
+    const bufferCubegeometry = new THREE.BoxBufferGeometry(1, 1, 1);
+    const material = new THREE.MeshBasicMaterial({
       color: 0x00afff,
-      wireframe: true
+      wireframe: false
     });
     this.model = new THREE.Mesh(bufferCubegeometry, material);
     this.scene.add(this.model);
+    this.model.position.set(-5,0,0);
+
+    // Load model
+    var mtlLoader = new MTLLoader();
+    mtlLoader.setPath("./public/");
+    mtlLoader.load("r2-d2.mtl", materials => {
+      materials.preload();
+      console.log("Material loaded");
+
+      // Load model
+      var objLoader = new OBJLoader();
+      objLoader.setMaterials(materials);
+      objLoader.load("r2-d2.obj",
+      object => {
+        this.freedomMesh = object;
+        this.freedomMesh.position.setY(0);
+        this.freedomMesh.scale.set(0.02, 0.02, 0.02);
+        this.scene.add(this.freedomMesh);
+      },
+      xhr => {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      },
+
+      error => {
+        console.log("An error happened" + error)
+      });
+
+    });
+
 
     this.renderScene();
     this.start();
