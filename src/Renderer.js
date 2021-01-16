@@ -116,7 +116,7 @@ class Renderer extends Component {
     console.log(icosphere.triangles);
 
     const geometry = new THREE.BufferGeometry();
-    const indexBuffer = new THREE.BufferAttribute(icosphere.triangles,1);
+    const indexBuffer = new THREE.BufferAttribute(icosphere.triangles, 1);
     geometry.setIndex(indexBuffer);
     geometry.setAttribute('position', new THREE.Float32BufferAttribute(icosphere.vertices, 3));
     geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icosphere.vertices, 3));
