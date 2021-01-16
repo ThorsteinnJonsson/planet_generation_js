@@ -81,6 +81,12 @@ class Renderer extends Component {
     this.scene.add(gridHelper);
   }
 
+  addPlanet = () => {
+    const icoOrder = 3;
+    this.icosphere = generateIcosphere(icoOrder);
+    this.scene.add(this.icosphere);
+  }
+
   componentDidMount() {
 
     const width = window.innerWidth;
@@ -101,28 +107,7 @@ class Renderer extends Component {
     // this.addModels();
     this.addGrid();
 
-    const icosphere = generateIcosphere(4);
-    const colors = [];
-    for (let i = 0; i < icosphere.vertices.length / 3; i++) {
-      colors.push(0.3);
-      colors.push(0.7);
-      colors.push(0.6);
-    }
-
-    const geometry = new THREE.BufferGeometry();
-    const indexBuffer = new THREE.BufferAttribute(icosphere.triangles, 1);
-    geometry.setIndex(indexBuffer);
-    geometry.setAttribute('position', new THREE.Float32BufferAttribute(icosphere.vertices, 3));
-    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icosphere.vertices, 3));
-    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-    const material = new THREE.MeshPhongMaterial({
-      side: THREE.DoubleSide,
-      // vertexColors: true,
-      color: 0x3faaeb,
-      flatShading: true
-    });
-    this.mesh = new THREE.Mesh(geometry, material);
-    this.scene.add(this.mesh);
+    this.addPlanet();
 
     this.renderScene();
     this.start();
