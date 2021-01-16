@@ -3,6 +3,8 @@ import * as THREE from "three";
 import OrbitControls from "three-orbitcontrols";
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 
+import generateIcosphere from "./Geometry"
+
 class Renderer extends Component {
 
   setupCamera = (width, height) => {
@@ -96,8 +98,38 @@ class Renderer extends Component {
     this.setupControls();
     this.setupLights();
 
-    this.addModels();
+    // this.addModels();
     this.addGrid();
+
+    const icosphere = generateIcosphere(4);
+    const colors = [];
+    for (let i = 0; i < icosphere.vertices.length / 3; i++) {
+      colors.push(0.3);
+      colors.push(0.7);
+      colors.push(0.6);
+    }
+
+    console.log(icosphere.vertices.length);
+    console.log(icosphere.vertices);
+
+    console.log(icosphere.triangles.length);
+    console.log(icosphere.triangles);
+
+    const geometry = new THREE.BufferGeometry();
+    const indexBuffer = new THREE.BufferAttribute(icosphere.triangles,1);
+    geometry.setIndex(indexBuffer);
+    geometry.setAttribute('position', new THREE.Float32BufferAttribute(icosphere.vertices, 3));
+    geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icosphere.vertices, 3));
+    geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    const material = new THREE.MeshPhongMaterial({
+      side: THREE.DoubleSide,
+      // vertexColors: true,
+      color: 0x3214eb,
+      flatShading: true
+    });
+    this.mesh = new THREE.Mesh(geometry, material);
+    this.scene.add(this.mesh);
+
 
     this.renderScene();
     this.start();
@@ -114,7 +146,9 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    this.model.rotation.y += 0.01;
+    if (this.model) {
+      this.model.rotation.y += 0.01;
+    }
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
