@@ -1,4 +1,6 @@
-export default function generateIcosphere(order = 4, uvMap = false) {
+import * as THREE from 'three';
+
+function generateIcosphereData(order = 4, uvMap = false) {
   if (order > 10) throw new Error(`Max order is 10, but given ${order}.`);
 
   // set up an icosahedron (12 vertices / 20 triangles)
@@ -12,14 +14,14 @@ export default function generateIcosphere(order = 4, uvMap = false) {
   vertices.set(Float32Array.of(
     -1, f, 0, 1, f, 0, -1, -f, 0, 1, -f, 0,
     0, -1, f, 0, 1, f, 0, -1, -f, 0, 1, -f,
-    f, 0, -1, f, 0, 1, -f, 0, -1, -f, 0, 1
+    f, 0, -1, f, 0, 1, -f, 0, -1, -f, 0, 1,
   ));
 
   let triangles = Uint16Array.of(
     0, 11, 5, 0, 5, 1, 0, 1, 7, 0, 7, 10, 0, 10, 11,
     11, 10, 2, 5, 11, 4, 1, 5, 9, 7, 1, 8, 10, 7, 6,
     3, 9, 4, 3, 4, 2, 3, 2, 6, 3, 6, 8, 3, 8, 9,
-    9, 8, 1, 4, 9, 5, 2, 4, 11, 6, 2, 10, 8, 6, 7
+    9, 8, 1, 4, 9, 5, 2, 4, 11, 6, 2, 10, 8, 6, 7,
   );
 
   let v = 12;
@@ -119,12 +121,10 @@ export default function generateIcosphere(order = 4, uvMap = false) {
       ax = (bx + cx) / 2;
       if (ay === bx) uv[2 * a] = ax;
       else triangles[i + 0] = addDuplicate(a, ax, ay, false);
-
     } else if (by === 0 || by === 1) {
       bx = (ax + cx) / 2;
       if (by === ax) uv[2 * b] = bx;
       else triangles[i + 1] = addDuplicate(b, bx, by, false);
-
     } else if (cy === 0 || cy === 1) {
       cx = (ax + bx) / 2;
       if (cy === ax) uv[2 * c] = cx;
@@ -137,3 +137,11 @@ export default function generateIcosphere(order = 4, uvMap = false) {
 
   return { vertices, triangles, uv };
 }
+
+function generateIcosphere(order = 4, uvMap = false) {
+  const icoData = generateIcosphereData(order, uvMap);
+
+  return icoData;
+}
+
+export default generateIcosphere;

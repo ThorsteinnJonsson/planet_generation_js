@@ -109,12 +109,6 @@ class Renderer extends Component {
       colors.push(0.6);
     }
 
-    console.log(icosphere.vertices.length);
-    console.log(icosphere.vertices);
-
-    console.log(icosphere.triangles.length);
-    console.log(icosphere.triangles);
-
     const geometry = new THREE.BufferGeometry();
     const indexBuffer = new THREE.BufferAttribute(icosphere.triangles, 1);
     geometry.setIndex(indexBuffer);
@@ -124,12 +118,11 @@ class Renderer extends Component {
     const material = new THREE.MeshPhongMaterial({
       side: THREE.DoubleSide,
       // vertexColors: true,
-      color: 0x3214eb,
+      color: 0x3faaeb,
       flatShading: true
     });
     this.mesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.mesh);
-
 
     this.renderScene();
     this.start();
