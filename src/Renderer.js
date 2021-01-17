@@ -8,8 +8,8 @@ import generateIcosphere from "./Geometry"
 class Renderer extends Component {
 
   setupCamera = (width, height) => {
-    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    this.camera.position.z = 8;
+    this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100000);
+    this.camera.position.z = 20000;
     this.camera.position.y = 5;
   }
 
@@ -18,16 +18,15 @@ class Renderer extends Component {
   }
 
   setupLights = () => {
-    var lights = [];
-    lights[0] = new THREE.PointLight(0xffffff, 1, 0);
-    lights[1] = new THREE.PointLight(0xffffff, 1, 0);
-    lights[2] = new THREE.PointLight(0xffffff, 1, 0);
-    lights[0].position.set(0, 200, 0);
-    lights[1].position.set(100, 200, 100);
-    lights[2].position.set(-100, -200, -100);
-    this.scene.add(lights[0]);
-    this.scene.add(lights[1]);
-    this.scene.add(lights[2]);
+    // Sun
+    const sunlight = new THREE.DirectionalLight(0xffffff, 1, 0);
+    sunlight.position.set(-200000, 0, 200000);
+    this.scene.add(sunlight);
+
+
+    // Ambient
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.7);
+    this.scene.add(ambientLight);
   }
 
   loadPlaceholderModel = () => {
@@ -82,8 +81,8 @@ class Renderer extends Component {
   }
 
   addPlanet = () => {
-    const icoOrder = 0;
-    const icoRadius = 2;
+    const icoOrder = 3;
+    const icoRadius = 12742;
     this.icosphere = generateIcosphere(icoOrder, icoRadius);
     this.scene.add(this.icosphere);
   }
