@@ -25,65 +25,13 @@ class Renderer extends Component {
     sunlight.position.set(-200000, 0, 200000);
     this.scene.add(sunlight);
 
-
     // Ambient
     const ambientLight = new THREE.AmbientLight(0x404040, 0.7);
     this.scene.add(ambientLight);
   }
 
-  loadPlaceholderModel = () => {
-    // Load model
-    var mtlLoader = new MTLLoader();
-    mtlLoader.setPath("./public/"); // This doesn't seem to work?
-    mtlLoader.load("r2-d2.mtl", materials => {
-      materials.preload();
-      console.log("Material loaded");
-
-      // Load model
-      var objLoader = new OBJLoader();
-      objLoader.setMaterials(materials);
-      objLoader.load("r2-d2.obj",
-        object => {
-          this.freedomMesh = object;
-          this.freedomMesh.position.setY(0);
-          this.freedomMesh.scale.set(0.02, 0.02, 0.02);
-          this.scene.add(this.freedomMesh);
-        },
-        xhr => {
-          console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-        },
-        error => {
-          console.log("An error happened" + error)
-        });
-    });
-  }
-
-  addModels = () => {
-    // Add cube
-    const bufferCubegeometry = new THREE.BoxBufferGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({
-      color: 0x00afff,
-      wireframe: false
-    });
-    this.model = new THREE.Mesh(bufferCubegeometry, material);
-    this.scene.add(this.model);
-    this.model.position.set(-5, 0, 0);
-
-    // Add placeholder model
-    this.loadPlaceholderModel();
-  }
-
-  addGrid = () => {
-    const size = 100;
-    const divisions = 100;
-    const centerLineColor = 0x888888;
-    const lineColor = 0x888888;
-    const gridHelper = new THREE.GridHelper(size, divisions, centerLineColor, lineColor);
-    this.scene.add(gridHelper);
-  }
-
   addPlanet = () => {
-    const icoOrder = 5;
+    const icoOrder = 2;
     const icoRadius = 12742; // Earth's radius
     this.icosphere = generateIcosphere(icoOrder, icoRadius);
     this.scene.add(this.icosphere);
@@ -105,9 +53,6 @@ class Renderer extends Component {
     this.setupCamera(width, height);
     this.setupControls();
     this.setupLights();
-
-    // this.addModels();
-    this.addGrid();
 
     this.addPlanet();
 
