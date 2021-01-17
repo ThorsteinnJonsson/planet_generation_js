@@ -165,7 +165,7 @@ function generateIcosphere(order = 4, radius = 1.0) {
   const material = new THREE.MeshPhongMaterial({
     side: THREE.DoubleSide,
     // vertexColors: true,
-    color: 0x3faa3b,
+    color: 0x3287a8,
     flatShading: true
   });
   const icoMesh = new THREE.Mesh(geometry, material);
