@@ -31,7 +31,7 @@ class Renderer extends Component {
   }
 
   addPlanet = () => {
-    const icoOrder = 2;
+    const icoOrder = 5;
     const icoRadius = 12742; // Earth's radius
     this.icosphere = generateIcosphere(icoOrder, icoRadius);
     this.scene.add(this.icosphere);

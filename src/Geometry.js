@@ -144,8 +144,11 @@ function generateIcosphere(order = 4, radius = 1.0) {
   const icoData = generateIcosphereData(order, uvMap);
 
   // Scale with radius
-  for (let i = 0; i < icoData.vertices.length; i++) {
-    icoData.vertices[i] = radius * icoData.vertices[i];
+  for (let i = 0; i < icoData.vertices.length/3; i++) {
+    const j = 3*i;
+    icoData.vertices[j] = radius * icoData.vertices[j];
+    icoData.vertices[j+1] = radius * icoData.vertices[j+1];
+    icoData.vertices[j+2] = radius * icoData.vertices[j+2];
   }  
 
   const geometry = new THREE.BufferGeometry();
