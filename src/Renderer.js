@@ -82,8 +82,9 @@ class Renderer extends Component {
   }
 
   addPlanet = () => {
-    const icoOrder = 3;
-    this.icosphere = generateIcosphere(icoOrder);
+    const icoOrder = 0;
+    const icoRadius = 2;
+    this.icosphere = generateIcosphere(icoOrder, icoRadius);
     this.scene.add(this.icosphere);
   }
 

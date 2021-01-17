@@ -138,28 +138,34 @@ function generateIcosphereData(order = 4, uvMap = false) {
   return { vertices, triangles, uv };
 }
 
-function generateIcosphere(order = 4) {
+function generateIcosphere(order = 4, radius = 1.0) {
   
   const uvMap = false;
   const icoData = generateIcosphereData(order, uvMap);
 
-  const colors = [];
-  for (let i = 0; i < icoData.vertices.length / 3; i++) {
-    colors.push(0.3);
-    colors.push(0.7);
-    colors.push(0.6);
-  }
+  // Scale with radius
+  for (let i = 0; i < icoData.vertices.length; i++) {
+    icoData.vertices[i] = radius * icoData.vertices[i];
+  }  
 
   const geometry = new THREE.BufferGeometry();
   const indexBuffer = new THREE.BufferAttribute(icoData.triangles, 1);
   geometry.setIndex(indexBuffer);
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(icoData.vertices, 3));
   geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icoData.vertices, 3));
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+  // const colors = [];
+  // for (let i = 0; i < icoData.vertices.length / 3; i++) {
+  //   colors.push(0.3);
+  //   colors.push(0.7);
+  //   colors.push(0.6);
+  // }
+  // geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
   const material = new THREE.MeshPhongMaterial({
     side: THREE.DoubleSide,
     // vertexColors: true,
-    color: 0x3faaeb,
+    color: 0x3faa3b,
     flatShading: true
   });
   const icoMesh = new THREE.Mesh(geometry, material);
