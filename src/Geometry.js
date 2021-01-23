@@ -157,19 +157,18 @@ function generateIcosphereMesh(order = 4, radius = 1.0) {
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(icoData.vertices, 3));
   geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icoData.vertices, 3));
 
-  // const colors = [];
-  // for (let i = 0; i < icoData.vertices.length / 3; i++) {
-  //   colors.push(0.3);
-  //   colors.push(0.7);
-  //   colors.push(0.6);
-  // }
-  // geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+  const colors = [];
+  for (let i = 0; i < icoData.vertices.length / 3; i++) {
+    colors.push(0.3);
+    colors.push(0.7);
+    colors.push(0.6);
+  }
+  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.MeshPhongMaterial({
-    // vertexColors: true,
-    // side: THREE.DoubleSide,
+    vertexColors: true,
     flatShading: true,
-    color: 0x3287a8,
+    // color: 0x3287a8,
     // wireframe: true
   });
   const icoMesh = new THREE.Mesh(geometry, material);

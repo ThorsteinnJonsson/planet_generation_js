@@ -15,14 +15,14 @@ class Planet {
 
   }
 
-  getNoise = (noiseGenerator, x, y, z, numIter, scale, persistence, low, high) => {
+  getRadiusScaling = (x, y, z, numIter, scale, persistence, low, high) => {
     let maxAmp = 0;
     let amp = 1;
     let freq = scale;
     let noise = 0;
 
     for (let iter = 0; iter < numIter; iter++) {
-      noise += noiseGenerator.simplex3(x * freq, y * freq, z * freq) * amp;
+      noise += this.noise.simplex3(x * freq, y * freq, z * freq) * amp;
       maxAmp += amp;
       amp *= persistence;
       freq *= 2;
@@ -34,7 +34,7 @@ class Planet {
   };
 
   generateHeight = () => {
-    const numIter = 3;
+    const numIter = 16;
     const noiseScale = 2.0/this.radius;
     const persistence = 0.25;
     const minRad = 0.9;
@@ -49,16 +49,15 @@ class Planet {
       const z = posBuffer.array[3*i+2]
 
       // Generate noise
-      const radiusScalingFactor = this.getNoise(this.noise, x, y, z, numIter, noiseScale, persistence, minRad, maxRad);
+      const radiusScalingFactor = this.getRadiusScaling(x, y, z, numIter, noiseScale, persistence, minRad, maxRad);
 
       // To spherical
       const r = Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
       const theta = Math.acos(z/r);
       const phi = Math.atan2(y,x);
 
-      // Add radius
-      const heightScale = 1.0;
-      const new_r = r * (0.0 + heightScale * radiusScalingFactor);
+      // Add radius. Height will be same as planet radius if lower because that is the ocean level
+      const new_r = Math.max(this.radius, r * radiusScalingFactor)
 
       // Back to cartesian
       posBuffer.array[3*i] = new_r * Math.sin(theta) * Math.cos(phi);
@@ -72,13 +71,10 @@ class Planet {
   generate = (icoOrder = 5) => {
     this.icosphereMesh = generateIcosphereMesh(icoOrder, this.radius);
 
-    // Generate ocean mask
-    
     // Generate height
     this.generateHeight();
 
 
-    
   };
 
   getMesh = () => {
