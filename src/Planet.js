@@ -14,13 +14,9 @@ class Planet {
     this.noise = new Noise.Noise(Math.random());
 
   }
-  
-  generate = (icoOrder = 5) => {
-    this.icosphereMesh = generateIcosphereMesh(icoOrder, this.radius);
 
-    // Generate ocean mask
-    
-    // Generate height
+
+  generateHeight = () => {
     const posBuffer = this.icosphereMesh.geometry.getAttribute('position');
     const lenghtBuffer = posBuffer.array.length;
     console.log(posBuffer);
@@ -50,6 +46,17 @@ class Planet {
       posBuffer.array[3*i+1] = new_r * Math.sin(theta) * Math.sin(phi);
       posBuffer.array[3*i+2] = new_r * Math.cos(theta);
     }
+  };
+  
+
+  generate = (icoOrder = 5) => {
+    this.icosphereMesh = generateIcosphereMesh(icoOrder, this.radius);
+
+    // Generate ocean mask
+    
+    // Generate height
+    this.generateHeight();
+
 
     
   };
