@@ -25,6 +25,11 @@ class Renderer extends Component {
     sunlight.position.set(-200000, 0, 200000);
     this.scene.add(sunlight);
 
+    // Sun
+    const tempsunlight = new THREE.DirectionalLight(0xffffff, 1, 0);
+    tempsunlight.position.set(200000, 0, -200000);
+    this.scene.add(tempsunlight);
+
     // Ambient
     const ambientLight = new THREE.AmbientLight(0x404040, 0.7);
     this.scene.add(ambientLight);
@@ -32,9 +37,8 @@ class Renderer extends Component {
 
   addPlanet = () => {
     const icoOrder = 5;
-
     this.planet = new Planet;
-    this.planet.generate();
+    this.planet.generate(icoOrder);
 
 
     this.scene.add(this.planet.getMesh());

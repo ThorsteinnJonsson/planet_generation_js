@@ -166,10 +166,11 @@ function generateIcosphereMesh(order = 4, radius = 1.0) {
   // geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.MeshPhongMaterial({
-    side: THREE.DoubleSide,
     // vertexColors: true,
+    // side: THREE.DoubleSide,
+    flatShading: true,
     color: 0x3287a8,
-    flatShading: true
+    // wireframe: true
   });
   const icoMesh = new THREE.Mesh(geometry, material);
 
