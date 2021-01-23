@@ -52,12 +52,6 @@ class Planet {
   };
 
   generateHeight = () => {
-    const numIter =this.noiseParams.numIter;
-    const noiseScale =this.noiseParams.noiseScale;
-    const persistence =this.noiseParams.persistence;
-    const minRad =this.noiseParams.minRad;
-    const maxRad =this.noiseParams.maxRad;
-
     const posBuffer = this.icosphereMesh.geometry.getAttribute('position');
     const lenghtBuffer = posBuffer.array.length;
     for (let i = 0; i < lenghtBuffer/3; i++) {
@@ -67,7 +61,12 @@ class Planet {
       const z = posBuffer.array[3*i+2]
 
       // Generate noise
-      const radiusScalingFactor = this.getRadiusScaling(x, y, z, numIter, noiseScale, persistence, minRad, maxRad);
+      const radiusScalingFactor = this.getRadiusScaling(x, y, z, 
+                                                        this.noiseParams.numIter, 
+                                                        this.noiseParams.noiseScale, 
+                                                        this.noiseParams.persistence, 
+                                                        this.noiseParams.minRad, 
+                                                        this.noiseParams.maxRad);
 
       // To spherical
       const r = Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
