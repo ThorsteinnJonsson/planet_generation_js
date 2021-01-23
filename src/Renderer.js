@@ -9,13 +9,13 @@ class Renderer extends Component {
 
   setupCamera = (width, height) => {
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100000);
-    this.camera.position.z = 20000;
-    this.camera.position.y = 5;
+    this.camera.position.z = 25000;
+    this.camera.position.y = 0;
   }
 
   setupControls = () => {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.minDistance = 15000;
+    this.controls.minDistance = 20000;
     this.controls.maxDistance = 100000;
   }
 
