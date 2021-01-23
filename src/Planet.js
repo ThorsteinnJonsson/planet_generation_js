@@ -10,8 +10,26 @@ class Planet {
 
     this.icosphereMesh = null
 
-
     this.noise = new Noise.Noise(Math.random());
+    this.noiseParams = {
+      numIter: 16,
+      noiseScale: 2.0/this.radius,
+      persistence: 0.25,
+      minRad: 0.9,
+      maxRad: 1.1,
+    }
+
+    this.oceanColor = {
+      r: 0 / 255,
+      g: 84 / 255,
+      b: 147 / 255,
+    };
+
+    this.groundColor = {
+      r: 125 / 255,
+      g: 162 / 255,
+      b: 126 / 255,
+    };
 
   }
 
@@ -34,11 +52,11 @@ class Planet {
   };
 
   generateHeight = () => {
-    const numIter = 16;
-    const noiseScale = 2.0/this.radius;
-    const persistence = 0.25;
-    const minRad = 0.9;
-    const maxRad = 1.1;
+    const numIter =this.noiseParams.numIter;
+    const noiseScale =this.noiseParams.noiseScale;
+    const persistence =this.noiseParams.persistence;
+    const minRad =this.noiseParams.minRad;
+    const maxRad =this.noiseParams.maxRad;
 
     const posBuffer = this.icosphereMesh.geometry.getAttribute('position');
     const lenghtBuffer = posBuffer.array.length;
@@ -64,15 +82,19 @@ class Planet {
       posBuffer.array[3*i+1] = new_r * Math.sin(theta) * Math.sin(phi);
       posBuffer.array[3*i+2] = new_r * Math.cos(theta);
     }
+  };
 
+  applyColor = () => {
+    // TODO
   };
   
 
   generate = (icoOrder = 5) => {
     this.icosphereMesh = generateIcosphereMesh(icoOrder, this.radius);
 
-    // Generate height
     this.generateHeight();
+
+    this.applyColor();
 
 
   };

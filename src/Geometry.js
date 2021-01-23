@@ -149,20 +149,20 @@ function generateIcosphereMesh(order = 4, radius = 1.0) {
     icoData.vertices[j] = radius * icoData.vertices[j];
     icoData.vertices[j+1] = radius * icoData.vertices[j+1];
     icoData.vertices[j+2] = radius * icoData.vertices[j+2];
-  }  
+  }
+
+  const colors = [];
+  for (let i = 0; i < icoData.vertices.length / 3; i++) {
+    colors.push(125 / 255);
+    colors.push(162 / 255);
+    colors.push(126 / 255);
+  }
 
   const geometry = new THREE.BufferGeometry();
   const indexBuffer = new THREE.BufferAttribute(icoData.triangles, 1);
   geometry.setIndex(indexBuffer);
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(icoData.vertices, 3));
   geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icoData.vertices, 3));
-
-  const colors = [];
-  for (let i = 0; i < icoData.vertices.length / 3; i++) {
-    colors.push(0.3);
-    colors.push(0.7);
-    colors.push(0.6);
-  }
   geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 
   const material = new THREE.MeshPhongMaterial({
