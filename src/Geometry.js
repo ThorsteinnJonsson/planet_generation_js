@@ -153,9 +153,9 @@ function generateIcosphereMesh(order = 4, radius = 1.0) {
 
   const colors = [];
   for (let i = 0; i < icoData.vertices.length / 3; i++) {
-    colors.push(125 / 255);
-    colors.push(162 / 255);
-    colors.push(126 / 255);
+    colors.push(150 / 255);
+    colors.push(150 / 255);
+    colors.push(150 / 255);
   }
 
   const geometry = new THREE.BufferGeometry();
@@ -167,8 +167,8 @@ function generateIcosphereMesh(order = 4, radius = 1.0) {
 
   const material = new THREE.MeshPhongMaterial({
     vertexColors: true,
+    blending: THREE.NoBlending,
     flatShading: true,
-    // color: 0x3287a8,
     // wireframe: true
   });
   const icoMesh = new THREE.Mesh(geometry, material);

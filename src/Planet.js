@@ -53,12 +53,12 @@ class Planet {
 
   generateHeight = () => {
     const posBuffer = this.icosphereMesh.geometry.getAttribute('position');
-    const lenghtBuffer = posBuffer.array.length;
-    for (let i = 0; i < lenghtBuffer/3; i++) {
+    const lengthBuffer = posBuffer.array.length;
+    for (let i = 0; i < lengthBuffer/3; i++) {
       // Get noise val
-      const x = posBuffer.array[3*i]
-      const y = posBuffer.array[3*i+1]
-      const z = posBuffer.array[3*i+2]
+      const x = posBuffer.array[3*i];
+      const y = posBuffer.array[3*i+1];
+      const z = posBuffer.array[3*i+2];
 
       // Generate noise
       const radiusScalingFactor = this.getRadiusScaling(x, y, z, 
@@ -84,7 +84,26 @@ class Planet {
   };
 
   applyColor = () => {
-    // TODO
+    const posBuffer = this.icosphereMesh.geometry.getAttribute('position');
+    const colorBuffer = this.icosphereMesh.geometry.getAttribute('color');
+    const lengthBuffer = posBuffer.array.length;
+
+    for (let i = 0; i < lengthBuffer/3; i++) {
+      // Get noise val
+      const x = posBuffer.array[3*i];
+      const y = posBuffer.array[3*i+1];
+      const z = posBuffer.array[3*i+2];
+      const r = Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
+
+      const color = (r <= this.radius+0.001)? this.oceanColor : this.groundColor;
+      colorBuffer.array[3*i] = color.r;
+      colorBuffer.array[3*i+1] = color.g;
+      colorBuffer.array[3*i+2] = color.b;
+
+
+    }
+
+
   };
   
 
