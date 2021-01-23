@@ -78,8 +78,8 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    if (this.model) {
-      this.model.rotation.y += 0.01;
+    if (this.planet.getMesh()) {
+      this.planet.getMesh().rotation.y += 0.001;
     }
 
     this.renderScene();
