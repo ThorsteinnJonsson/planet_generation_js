@@ -138,7 +138,7 @@ function generateIcosphereData(order = 4, uvMap = false) {
   return { vertices, triangles, uv };
 }
 
-function generateIcosphere(order = 4, radius = 1.0) {
+function generateIcosphereMesh(order = 4, radius = 1.0) {
   
   const uvMap = false;
   const icoData = generateIcosphereData(order, uvMap);
@@ -176,4 +176,4 @@ function generateIcosphere(order = 4, radius = 1.0) {
   return icoMesh;
 }
 
-export default generateIcosphere;
+export default generateIcosphereMesh;

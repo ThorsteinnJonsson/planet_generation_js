@@ -3,7 +3,7 @@ import * as THREE from "three";
 import OrbitControls from "three-orbitcontrols";
 import { MTLLoader, OBJLoader } from "three-obj-mtl-loader";
 
-import generateIcosphere from "./Geometry"
+import Planet from "./Planet"
 
 class Renderer extends Component {
 
@@ -32,9 +32,12 @@ class Renderer extends Component {
 
   addPlanet = () => {
     const icoOrder = 5;
-    const icoRadius = 12742; // Earth's radius
-    this.icosphere = generateIcosphere(icoOrder, icoRadius);
-    this.scene.add(this.icosphere);
+
+    this.planet = new Planet;
+    this.planet.generate();
+
+
+    this.scene.add(this.planet.getMesh());
   }
 
   componentDidMount() {
