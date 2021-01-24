@@ -151,29 +151,12 @@ function generateIcosphereMesh(order = 4, radius = 1.0) {
     icoData.vertices[j+2] = radius * icoData.vertices[j+2];
   }
 
-  const colors = [];
-  for (let i = 0; i < icoData.vertices.length / 3; i++) {
-    colors.push(150 / 255);
-    colors.push(150 / 255);
-    colors.push(150 / 255);
-  }
-
   const geometry = new THREE.BufferGeometry();
   const indexBuffer = new THREE.BufferAttribute(icoData.triangles, 1);
   geometry.setIndex(indexBuffer);
   geometry.setAttribute('position', new THREE.Float32BufferAttribute(icoData.vertices, 3));
   geometry.setAttribute('normal', new THREE.Float32BufferAttribute(icoData.vertices, 3));
-  geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-
-  const material = new THREE.MeshPhongMaterial({
-    vertexColors: true,
-    blending: THREE.NoBlending,
-    flatShading: true,
-    // wireframe: true
-  });
-  const icoMesh = new THREE.Mesh(geometry, material);
-
-  return icoMesh;
+  return geometry;
 }
 
 export default generateIcosphereMesh;
