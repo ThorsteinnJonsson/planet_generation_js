@@ -1,5 +1,5 @@
 import generateIcosphereMesh from "./Geometry"
-
+import * as THREE from 'three';
 import Noise from "noisejs"
 
 
@@ -25,12 +25,11 @@ class Planet {
       b: 147 / 255,
     };
 
-    this.groundColor = {
+    this.landColor = {
       r: 125 / 255,
       g: 162 / 255,
       b: 126 / 255,
     };
-
   }
 
   getRadiusScaling = (x, y, z, numIter, scale, persistence, low, high) => {
@@ -83,36 +82,66 @@ class Planet {
     }
   };
 
-  applyColor = () => {
-    const posBuffer = this.icosphereMesh.geometry.getAttribute('position');
-    const colorBuffer = this.icosphereMesh.geometry.getAttribute('color');
-    const lengthBuffer = posBuffer.array.length;
-
-    for (let i = 0; i < lengthBuffer/3; i++) {
-      // Get noise val
-      const x = posBuffer.array[3*i];
-      const y = posBuffer.array[3*i+1];
-      const z = posBuffer.array[3*i+2];
-      const r = Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2));
-
-      const color = (r <= this.radius+0.001)? this.oceanColor : this.groundColor;
-      colorBuffer.array[3*i] = color.r;
-      colorBuffer.array[3*i+1] = color.g;
-      colorBuffer.array[3*i+2] = color.b;
-
-
-    }
-
-
-  };
   
+  getShaderMaterial = () => {
+
+    let uniforms = {
+      oceanColor: {type: 'vec3', value: new THREE.Color(0x005493)},
+      landColor: {type: 'vec3', value: new THREE.Color(0x7da27e)},
+      planetRadius : {type: 'float', value: this.radius}
+    };
+
+    let vertexShader = () => {
+      return `
+        varying vec3 vUv; 
+    
+        void main() {
+          vUv = position; 
+    
+          vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * modelViewPosition; 
+        }
+      `;
+    };
+
+    let fragmentShader = () => {
+      return `
+        uniform vec3 oceanColor; 
+        uniform vec3 landColor;
+        uniform float planetRadius;
+        varying vec3 vUv;
+
+        void main() {
+          float radius = sqrt(vUv.x * vUv.x + vUv.y * vUv.y + vUv.z * vUv.z);
+          vec3 selectedColor = (radius <= planetRadius)? oceanColor : landColor;
+          gl_FragColor = vec4( selectedColor, 1.0);
+        }
+      `;
+    };
+    let material = new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: vertexShader(),
+      fragmentShader: fragmentShader(),
+    });
+
+
+    return material;
+  };
 
   generate = (icoOrder = 5) => {
-    this.icosphereMesh = generateIcosphereMesh(icoOrder, this.radius);
+    let geometry = generateIcosphereMesh(icoOrder, this.radius);
+    let material = this.getShaderMaterial();
+    
+    this.icosphereMesh = new THREE.Mesh(geometry, material);
+
+
+
+
+
 
     this.generateHeight();
+    
 
-    this.applyColor();
 
 
   };
