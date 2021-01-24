@@ -37,7 +37,7 @@ class Renderer extends Component {
 
   addPlanet = () => {
     const icoOrder = 5;
-    this.planet = new Planet;
+    this.planet = new Planet();
     this.planet.generate(icoOrder);
 
 
