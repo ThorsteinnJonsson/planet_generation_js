@@ -114,7 +114,7 @@ function generateIcosphereData(order = 4, uvMap = false) {
     // uv fixing code; don't ask me how I got here
     if (bx - ax >= 0.5 && ay !== 1) bx -= 1;
     if (cx - bx > 0.5) cx -= 1;
-    if (ax > 0.5 && ax - cx > 0.5 || ax === 1 && cy === 0) ax -= 1;
+    if ((ax > 0.5 && ax - cx > 0.5) || (ax === 1 && cy === 0)) ax -= 1;
     if (bx > 0.5 && bx - ax > 0.5) bx -= 1;
 
     if (ay === 0 || ay === 1) {
