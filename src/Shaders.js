@@ -1,6 +1,6 @@
 
 
-const snoiseDeclaration = `
+const simplex3dDeclaration = `
   vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
   vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
 
@@ -74,36 +74,49 @@ const snoiseDeclaration = `
   }
 `;
 
+const radiusScalingFunc = `
+  float getRadiusScaling(vec3 pos) {
+    float maxAmp = 0.0;
+    float amp = 1.0;
+    float freq = noiseScale;
+    float noise = 0.0;
+    
+    for (int iter = 0; iter < numIter; iter++) {
+      noise += snoise(pos * freq) * amp;
+      maxAmp += amp;
+      amp *= persistence;
+      freq *= 2.0;
+    }
+
+    noise /= maxAmp;
+    noise = noise * (maxRad - minRad) / 2.0 + (maxRad + minRad) / 2.0;
+    return noise;
+  }
+`;
+
+const planetGeometryUniforms = `
+  uniform float planetRadius;
+  uniform int numIter;
+  uniform float noiseScale;
+  uniform float persistence;
+  uniform float minRad;
+  uniform float maxRad;
+`;
+
+const planetColorUniforms = `
+  uniform vec3 oceanColor; 
+  uniform vec3 landColor;
+`;
+
 function planetVertexShader() {
   return `
     varying vec3 pos;
 
-    uniform float planetRadius;
-    uniform int numIter;
-    uniform float noiseScale;
-    uniform float persistence;
-    uniform float minRad;
-    uniform float maxRad;
+    ${planetGeometryUniforms}
 
-    ${snoiseDeclaration}
+    ${simplex3dDeclaration}
 
-    float getRadiusScaling(vec3 pos) {
-      float maxAmp = 0.0;
-      float amp = 1.0;
-      float freq = noiseScale;
-      float noise = 0.0;
-      
-      for (int iter = 0; iter < numIter; iter++) {
-        noise += snoise(pos * freq) * amp;
-        maxAmp += amp;
-        amp *= persistence;
-        freq *= 2.0;
-      }
-
-      noise /= maxAmp;
-      noise = noise * (maxRad - minRad) / 2.0 + (maxRad + minRad) / 2.0;
-      return noise;
-    }
+    ${radiusScalingFunc}
 
     void main() {
       pos = position;
@@ -120,7 +133,6 @@ function planetVertexShader() {
       float new_r = max(planetRadius, r * radiusScaling);
 
       // Convert back to cartesian coords
-
       pos.x = new_r * sin(theta) * cos(phi);
       pos.y = new_r * sin(theta) * sin(phi);
       pos.z = new_r * cos(theta);
@@ -133,17 +145,30 @@ function planetVertexShader() {
 
 function planetFragmentShader() {
   return `
-    uniform vec3 oceanColor; 
-    uniform vec3 landColor;
-    uniform float planetRadius;
-    varying vec3 pos;
+    varying vec3 pos;  
+  
+    ${planetGeometryUniforms}
+    ${planetColorUniforms}
+
+    ${simplex3dDeclaration}
+
+    ${radiusScalingFunc}
 
     void main() {
       float radius = sqrt(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
-      vec3 selectedColor = (radius <= planetRadius)? oceanColor : landColor;
-      // selectedColor.r = max(min((12900.0- radius) / (12900.0 - planetRadius), 1.0), 0.0);
-      // selectedColor.g = max(min((12900.0- radius) / (12900.0 - planetRadius), 1.0), 0.0);
-      // selectedColor.b = max(min((12900.0- radius) / (12900.0 - planetRadius), 1.0), 0.0);
+      
+      // Get radius scaling using simplex noise
+      float radiusScaling = getRadiusScaling(pos);
+  
+      // Convert to spherical coords
+      float r = sqrt(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
+      float theta = acos(pos.z/r);
+      float phi = atan(pos.y, pos.x);
+  
+      // Add radius. Height will be same as planet radius if lower because that is the ocean level
+      float height = max(planetRadius, r * radiusScaling);
+
+      vec3 selectedColor = (height <= planetRadius)? oceanColor : landColor;
       gl_FragColor = vec4( selectedColor, 1.0);
     }
   `;

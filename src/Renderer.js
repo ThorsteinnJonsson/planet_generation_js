@@ -35,7 +35,7 @@ class Renderer extends Component {
   }
 
   addPlanet = () => {
-    const icoOrder = 5;
+    const icoOrder = 4;
     this.planet = new Planet();
     this.planet.generate(icoOrder);
 
@@ -78,7 +78,7 @@ class Renderer extends Component {
 
   animate = () => {
     if (this.planet.getMesh()) {
-      // this.planet.getMesh().rotation.y += 0.001;
+      this.planet.getMesh().rotation.y += 0.001;
     }
 
     this.renderScene();
