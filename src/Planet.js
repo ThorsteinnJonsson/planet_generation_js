@@ -1,4 +1,5 @@
 import generateIcosphereMesh from "./Geometry"
+import * as SHADERS from "./Shaders"
 import * as THREE from 'three';
 import Noise from "noisejs"
 
@@ -91,37 +92,10 @@ class Planet {
       planetRadius : {type: 'float', value: this.radius}
     };
 
-    let vertexShader = () => {
-      return `
-        varying vec3 pos; 
-    
-        void main() {
-          pos = position; 
-    
-          vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
-          gl_Position = projectionMatrix * modelViewPosition;
-        }
-      `;
-    };
-
-    let fragmentShader = () => {
-      return `
-        uniform vec3 oceanColor; 
-        uniform vec3 landColor;
-        uniform float planetRadius;
-        varying vec3 pos;
-
-        void main() {
-          float radius = sqrt(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
-          vec3 selectedColor = (radius <= planetRadius)? oceanColor : landColor;
-          gl_FragColor = vec4( selectedColor, 1.0);
-        }
-      `;
-    };
     let material = new THREE.ShaderMaterial({
       uniforms: uniforms,
-      vertexShader: vertexShader(),
-      fragmentShader: fragmentShader(),
+      vertexShader: SHADERS.planetVertexShader(),
+      fragmentShader: SHADERS.planetFragmentShader(),
       // wireframe:true,
       // wireframeLinewidth: 5
     });
