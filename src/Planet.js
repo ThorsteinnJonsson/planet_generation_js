@@ -12,13 +12,13 @@ class Planet {
     this.icosphereMesh = null
 
     this.noise = new Noise.Noise(Math.random());
-    // this.noiseParams = {
-    //   numIter: 16,
-    //   noiseScale: 2.0/this.radius,
-    //   persistence: 0.25,
-    //   minRad: 0.9,
-    //   maxRad: 1.1,
-    // }
+    this.noiseParams = {
+      numIter: 16,
+      noiseScale: 2.0/this.radius,
+      persistence: 0.25,
+      minRad: 0.9,
+      maxRad: 1.1,
+    }
 
     this.oceanColor = {
       r: 0 / 255,
@@ -90,11 +90,11 @@ class Planet {
       oceanColor: {type: 'vec3', value: new THREE.Color(0x005493)},
       landColor: {type: 'vec3', value: new THREE.Color(0x7da27e)},
       planetRadius : {type: 'float', value: this.radius},
-      numIter: {type: 'int', value: 16},
-      noiseScale: {type: 'float', value: 2.0/this.radius},
-      persistence: {type: 'float', value: 0.25},
-      minRad: {type: 'float', value: 0.9},
-      maxRad: {type: 'float', value: 1.1},
+      numIter: {type: 'int', value: this.noiseParams.numIter},
+      noiseScale: {type: 'float', value: this.noiseParams.noiseScale},
+      persistence: {type: 'float', value: this.noiseParams.persistence},
+      minRad: {type: 'float', value: this.noiseParams.minRad},
+      maxRad: {type: 'float', value: this.noiseParams.maxRad},
     };
 
     let material = new THREE.ShaderMaterial({
