@@ -77,9 +77,7 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    if (this.planet.getMesh()) {
-      this.planet.getMesh().rotation.y += 0.001;
-    }
+    this.planet.rotate();
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);

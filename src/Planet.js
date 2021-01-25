@@ -70,6 +70,12 @@ class Planet {
     return this.icosphereMesh;
   };
 
+  rotate = () => {
+    if (this.icosphereMesh) {
+      this.icosphereMesh.rotation.y += 0.001;
+    }
+  }
+
 
 }
 
