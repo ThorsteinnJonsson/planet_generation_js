@@ -14,8 +14,9 @@ class Renderer extends Component {
 
   setupControls = () => {
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.minDistance = 15000;
+    this.controls.minDistance = 13500;
     this.controls.maxDistance = 100000;
+    this.controls.enablePan = false;
   }
 
   setupLights = () => {
