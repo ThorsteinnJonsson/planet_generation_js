@@ -176,7 +176,7 @@ function planetFragmentShader() {
       vec3 selectedColor = isOcean ? oceanColor : landColor;
       
       // Add beaches
-      float noBeachLat = 0.75;
+      float noBeachLat = 0.75; // To not generate beaches close to poles. 0.0 means no limitation so beaches can be anywhere. In radians.
       if ((height > planetRadius  && height <= planetRadius + 50.0) &&
           (theta > noBeachLat && theta < (3.1415-noBeachLat))) {
         float beachNoise = snoise(pos * 4.0 / planetRadius);
@@ -191,6 +191,12 @@ function planetFragmentShader() {
       float iceCapLatitudeSouth = 0.3 + 0.02 * cos(phi * 7.0) * sin(phi * 5.0) * cos(phi * 12.0);
       bool isPolar = theta < iceCapLatitudeNorth || theta > 3.14159 - iceCapLatitudeSouth;
       selectedColor = (isPolar) ? iceColor : selectedColor;
+
+      float polarChillFactor = 1.25; // How far ice extends on land from the ice caps. 1.0 means no extent.
+      bool isPolarExtension = (theta < (iceCapLatitudeNorth*polarChillFactor) || theta > (3.14159 - iceCapLatitudeSouth * polarChillFactor));
+      if (!isOcean && isPolarExtension) {
+        selectedColor = iceColor;
+      }
 
 
 
