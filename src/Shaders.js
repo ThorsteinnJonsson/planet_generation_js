@@ -128,16 +128,16 @@ function planetVertexShader() {
 
       // Convert to spherical coords
       float r = sqrt(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
-      float theta = acos(pos.z/r);
-      float phi = atan(pos.y, pos.x);
+      float theta = acos(pos.y/r);
+      float phi = atan(pos.z, pos.x);
 
       // Add radius. Height will be same as planet radius if lower because that is the ocean level
       float new_r = max(planetRadius, r * radiusScaling);
 
       // Convert back to cartesian coords
       pos.x = new_r * sin(theta) * cos(phi);
-      pos.y = new_r * sin(theta) * sin(phi);
-      pos.z = new_r * cos(theta);
+      pos.z = new_r * sin(theta) * sin(phi);
+      pos.y = new_r * cos(theta);
 
       vec4 modelViewPosition = modelViewMatrix * vec4(pos, 1.0);
       gl_Position = projectionMatrix * modelViewPosition;
@@ -164,8 +164,8 @@ function planetFragmentShader() {
   
       // Convert to spherical coords
       float r = sqrt(pos.x * pos.x + pos.y * pos.y + pos.z * pos.z);
-      float theta = acos(pos.z/r);
-      float phi = atan(pos.y, pos.x);
+      float theta = acos(pos.y/r);
+      float phi = atan(pos.z, pos.x);
   
       // Add radius. Height will be same as planet radius if lower because that is the ocean level
       float height = max(planetRadius, r * radiusScaling);
@@ -176,7 +176,8 @@ function planetFragmentShader() {
 
       // Apply ice caps
       float iceCapLatitude = planetRadius * 0.90;
-      bool isPolar = pos.y > iceCapLatitude || pos.y < -iceCapLatitude;
+      // bool isPolar = pos.y > iceCapLatitude || pos.y < -iceCapLatitude;
+      bool isPolar = theta < 0.3 || theta > 2.84;
       selectedColor = (isPolar) ? iceColor : selectedColor;
 
 
