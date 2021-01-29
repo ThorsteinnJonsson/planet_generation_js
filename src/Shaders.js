@@ -106,6 +106,7 @@ const planetGeometryUniforms = `
 const planetColorUniforms = `
   uniform vec3 oceanColor; 
   uniform vec3 landColor;
+  uniform vec3 iceColor;
 `;
 
 function planetVertexShader() {
@@ -121,6 +122,7 @@ function planetVertexShader() {
     void main() {
       pos = position;
       
+      // Generate height of each vertex
       // Get radius scaling using simplex noise
       float radiusScaling = getRadiusScaling(pos);
 
@@ -167,8 +169,18 @@ function planetFragmentShader() {
   
       // Add radius. Height will be same as planet radius if lower because that is the ocean level
       float height = max(planetRadius, r * radiusScaling);
+      
+      // Land vs Ocean discrimination
+      bool isOcean = (height <= planetRadius);
+      vec3 selectedColor = isOcean ? oceanColor : landColor;
 
-      vec3 selectedColor = (height <= planetRadius)? oceanColor : landColor;
+      // Apply ice caps
+      float iceCapLatitude = planetRadius * 0.90;
+      bool isPolar = pos.y > iceCapLatitude || pos.y < -iceCapLatitude;
+      selectedColor = (isPolar) ? iceColor : selectedColor;
+
+
+
       gl_FragColor = vec4( selectedColor, 1.0);
     }
   `;

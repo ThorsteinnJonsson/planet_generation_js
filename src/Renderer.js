@@ -9,7 +9,7 @@ class Renderer extends Component {
   setupCamera = (width, height) => {
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100000);
     this.camera.position.z = 25000;
-    this.camera.position.y = 0;
+    this.camera.position.y = 15000;
   }
 
   setupControls = () => {
@@ -78,7 +78,7 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    this.planet.rotate();
+    // this.planet.rotate();
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
