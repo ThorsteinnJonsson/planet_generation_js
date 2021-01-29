@@ -78,7 +78,7 @@ class Renderer extends Component {
   };
 
   animate = () => {
-    // this.planet.rotate();
+    this.planet.rotate();
 
     this.renderScene();
     this.frameId = window.requestAnimationFrame(this.animate);
