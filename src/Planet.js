@@ -15,7 +15,7 @@ class Planet {
     this.noiseParams = {
       numIter: 4,
       noiseScale: 2.0/this.radius,
-      persistence: 0.25,
+      persistence: 0.4,
       minRad: 0.9,
       maxRad: 1.1,
     }
