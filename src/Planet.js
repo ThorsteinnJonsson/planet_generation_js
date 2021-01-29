@@ -23,7 +23,8 @@ class Planet {
     this.planetColors = {
       ocean: 0x005493,
       land: 0x7da27e,
-      ice: 0xc5e0f5
+      ice: 0xc5e0f5,
+      beach: 0xffdc7f
     }
 
   }
@@ -34,6 +35,7 @@ class Planet {
       oceanColor: {type: 'vec3', value: new THREE.Color(this.planetColors.ocean)},
       landColor: {type: 'vec3', value: new THREE.Color(this.planetColors.land)},
       iceColor: {type: 'vec3', value: new THREE.Color(this.planetColors.ice)},
+      beachColor: {type: 'vec3', value: new THREE.Color(this.planetColors.beach)},
       planetRadius : {type: 'float', value: this.radius},
       numIter: {type: 'int', value: this.noiseParams.numIter},
       noiseScale: {type: 'float', value: this.noiseParams.noiseScale},

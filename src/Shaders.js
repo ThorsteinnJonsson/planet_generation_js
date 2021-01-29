@@ -107,6 +107,7 @@ const planetColorUniforms = `
   uniform vec3 oceanColor; 
   uniform vec3 landColor;
   uniform vec3 iceColor;
+  uniform vec3 beachColor;
 `;
 
 function planetVertexShader() {
@@ -173,6 +174,16 @@ function planetFragmentShader() {
       // Land vs Ocean discrimination
       bool isOcean = (height <= planetRadius);
       vec3 selectedColor = isOcean ? oceanColor : landColor;
+      
+      // Add beaches
+      float noBeachLat = 0.75;
+      if ((height > planetRadius  && height <= planetRadius + 50.0) &&
+          (theta > noBeachLat && theta < (3.1415-noBeachLat))) {
+        float beachNoise = snoise(pos * 4.0 / planetRadius);
+        if (beachNoise < 0.0) {
+          selectedColor = beachColor;
+        }
+      }
 
       // Apply ice caps
       // Ice cap is theta angle plus some noise to make it look more natural
