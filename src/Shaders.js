@@ -175,9 +175,10 @@ function planetFragmentShader() {
       vec3 selectedColor = isOcean ? oceanColor : landColor;
 
       // Apply ice caps
-      float iceCapLatitude = planetRadius * 0.90;
-      // bool isPolar = pos.y > iceCapLatitude || pos.y < -iceCapLatitude;
-      bool isPolar = theta < 0.3 || theta > 2.84;
+      // Ice cap is theta angle plus some noise to make it look more natural
+      float iceCapLatitudeNorth = 0.3 + 0.02 * cos(phi * 5.0) * sin(phi * 8.0) * sin(phi * 9.0);
+      float iceCapLatitudeSouth = 0.3 + 0.02 * cos(phi * 7.0) * sin(phi * 5.0) * cos(phi * 12.0);
+      bool isPolar = theta < iceCapLatitudeNorth || theta > 3.14159 - iceCapLatitudeSouth;
       selectedColor = (isPolar) ? iceColor : selectedColor;
 
 
