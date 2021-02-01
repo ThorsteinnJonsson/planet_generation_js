@@ -1,10 +1,16 @@
 import React, { Component } from 'react'
 import * as THREE from "three";
 import OrbitControls from "three-orbitcontrols";
+import * as dat from 'dat.gui';
 
 import Planet from "./Planet"
 
 class Renderer extends Component {
+
+
+  worldgenOptions = {
+    seed: 0
+  };
 
   setupCamera = (width, height) => {
     this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100000);
@@ -37,32 +43,51 @@ class Renderer extends Component {
 
   addPlanet = () => {
     const icoOrder = 4;
-    this.planet = new Planet();
+    this.planet = new Planet(this.worldgenOptions);
     this.planet.generate(icoOrder);
 
 
     this.scene.add(this.planet.getMesh());
     this.scene.add(this.planet.getCloudMesh());
-  }
+  };
+
+  generatePlanet = () => {
+    this.scene.clear();
+    
+    this.setupLights();
+
+    this.addPlanet();
+  };
+
+  addGui = () => {
+    this.gui = new dat.GUI();
+
+    const worldGen = this.gui.addFolder('World Generation');
+    
+    worldGen.add(this.worldgenOptions, 'seed', 0.0, 10000.0).listen();
+
+    // this.gui.addFolder('Colors');
+
+
+    this.gui.add(this, "generatePlanet");
+  };
 
   componentDidMount() {
-
-    const width = window.innerWidth;
-    const height = window.innerHeight;
 
     this.scene = new THREE.Scene();
 
     // Add renderer
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setClearColor("#263238");
-    this.renderer.setSize(width, height);
+    this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.mount.appendChild(this.renderer.domElement);
 
-    this.setupCamera(width, height);
+    this.setupCamera(window.innerWidth, window.innerHeight);
     this.setupControls();
-    this.setupLights();
 
-    this.addPlanet();
+    this.generatePlanet();
+
+    this.addGui();
 
     this.renderScene();
     this.start();

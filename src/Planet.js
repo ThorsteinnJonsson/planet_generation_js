@@ -6,8 +6,8 @@ import Noise from "noisejs"
 
 class Planet {
   
-  constructor() {
-    this.pseudoSeed = 42.0;
+  constructor(options) {
+    this.pseudoSeed = options.seed;
 
     this.radius = 12742; // Earth's radius
 
