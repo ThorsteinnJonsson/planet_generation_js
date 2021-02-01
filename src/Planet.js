@@ -13,7 +13,7 @@ class Planet {
 
     this.noise = new Noise.Noise(Math.random());
     this.noiseParams = {
-      numIter: 4,
+      numIter: 5,
       noiseScale: 2.0/this.radius,
       persistence: 0.4,
       minRad: 0.9,
@@ -24,7 +24,8 @@ class Planet {
       ocean: 0x005493,
       land: 0x7da27e,
       ice: 0xc5e0f5,
-      beach: 0xffdc7f
+      beach: 0xffdc7f,
+      mountain: 0x6b778a
     }
 
   }
@@ -36,6 +37,7 @@ class Planet {
       landColor: {type: 'vec3', value: new THREE.Color(this.planetColors.land)},
       iceColor: {type: 'vec3', value: new THREE.Color(this.planetColors.ice)},
       beachColor: {type: 'vec3', value: new THREE.Color(this.planetColors.beach)},
+      mountainColor: {type: 'vec3', value: new THREE.Color(this.planetColors.mountain)},
       planetRadius : {type: 'float', value: this.radius},
       numIter: {type: 'int', value: this.noiseParams.numIter},
       noiseScale: {type: 'float', value: this.noiseParams.noiseScale},

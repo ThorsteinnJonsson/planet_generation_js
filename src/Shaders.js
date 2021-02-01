@@ -108,6 +108,7 @@ const planetColorUniforms = `
   uniform vec3 landColor;
   uniform vec3 iceColor;
   uniform vec3 beachColor;
+  uniform vec3 mountainColor;
 `;
 
 function planetVertexShader() {
@@ -184,6 +185,15 @@ function planetFragmentShader() {
           selectedColor = beachColor;
         }
       }
+
+      // Add mountains with ice peaks
+      if (height > planetRadius * 1.075) {
+        selectedColor = mountainColor;
+      }
+      if (height > planetRadius * 1.105) {
+        selectedColor = iceColor;
+      }
+      
 
       // Apply ice caps
       // Ice cap is theta angle plus some noise to make it look more natural
