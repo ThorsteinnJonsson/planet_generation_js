@@ -109,6 +109,7 @@ const planetColorUniforms = `
   uniform vec3 iceColor;
   uniform vec3 beachColor;
   uniform vec3 mountainColor;
+  uniform vec3 forestColor;
 `;
 
 function planetVertexShader() {
@@ -186,6 +187,14 @@ function planetFragmentShader() {
         }
       }
 
+      // Add forests      
+      if (height > planetRadius + 100.0) {
+        float forestNoise = snoise(pos * 6.0 / planetRadius) + snoise(pos * 2.0 / planetRadius) + snoise(pos * 1.5 / planetRadius);
+        if (forestNoise > 0.5) {
+          selectedColor = forestColor;
+        }
+      }
+
       // Add mountains with ice peaks
       if (height > planetRadius * 1.075) {
         selectedColor = mountainColor;
@@ -193,7 +202,6 @@ function planetFragmentShader() {
       if (height > planetRadius * 1.105) {
         selectedColor = iceColor;
       }
-      
 
       // Apply ice caps
       // Ice cap is theta angle plus some noise to make it look more natural
@@ -207,8 +215,6 @@ function planetFragmentShader() {
       if (!isOcean && isPolarExtension) {
         selectedColor = iceColor;
       }
-
-
 
       gl_FragColor = vec4( selectedColor, 1.0);
     }

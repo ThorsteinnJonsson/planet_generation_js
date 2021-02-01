@@ -25,7 +25,8 @@ class Planet {
       land: 0x7da27e,
       ice: 0xc5e0f5,
       beach: 0xffdc7f,
-      mountain: 0x6b778a
+      mountain: 0x6b778a,
+      forest: 0x2e593c
     }
 
   }
@@ -38,6 +39,7 @@ class Planet {
       iceColor: {type: 'vec3', value: new THREE.Color(this.planetColors.ice)},
       beachColor: {type: 'vec3', value: new THREE.Color(this.planetColors.beach)},
       mountainColor: {type: 'vec3', value: new THREE.Color(this.planetColors.mountain)},
+      forestColor: {type: 'vec3', value: new THREE.Color(this.planetColors.forest)},
       planetRadius : {type: 'float', value: this.radius},
       numIter: {type: 'int', value: this.noiseParams.numIter},
       noiseScale: {type: 'float', value: this.noiseParams.noiseScale},
