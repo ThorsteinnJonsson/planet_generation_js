@@ -7,9 +7,11 @@ import Planet from "./Planet"
 
 class Renderer extends Component {
 
-
+  defaultSeed = 42;
+  defaultRadius = 12742; // Earth's radius
   worldgenOptions = {
-    seed: 0
+    seed: this.defaultSeed,
+    radius: this.defaultRadius,
   };
 
   setupCamera = (width, height) => {
@@ -59,17 +61,26 @@ class Renderer extends Component {
     this.addPlanet();
   };
 
+  reset = () => {
+    this.worldgenOptions.seed = this.defaultSeed;
+    this.worldgenOptions.radius = this.defaultRadius;
+    this.generatePlanet();
+  };
+
   addGui = () => {
     this.gui = new dat.GUI();
 
     const worldGen = this.gui.addFolder('World Generation');
     
     worldGen.add(this.worldgenOptions, 'seed', 0.0, 10000.0).listen();
+    worldGen.add(this.worldgenOptions, 'radius', 5000.0, 20000.0).listen();
 
     // this.gui.addFolder('Colors');
 
 
     this.gui.add(this, "generatePlanet");
+    this.gui.add(this, "reset");
+
   };
 
   componentDidMount() {

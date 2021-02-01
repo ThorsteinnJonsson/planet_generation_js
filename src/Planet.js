@@ -9,7 +9,7 @@ class Planet {
   constructor(options) {
     this.pseudoSeed = options.seed;
 
-    this.radius = 12742; // Earth's radius
+    this.radius = options.radius;
 
     this.icosphereMesh = null;
     this.cloudSphere = null;
