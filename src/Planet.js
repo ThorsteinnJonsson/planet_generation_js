@@ -7,6 +7,8 @@ import Noise from "noisejs"
 class Planet {
   
   constructor() {
+    this.pseudoSeed = 42.0;
+
     this.radius = 12742; // Earth's radius
 
     this.icosphereMesh = null;
@@ -33,9 +35,14 @@ class Planet {
 
   }
 
+  setSeed = (seed) => {
+    this.pseudoSeed = seed;
+  };
+
   getShaderMaterial = () => {
 
     let uniforms = {
+      pseudoSeed: {type: 'float', value: this.pseudoSeed},
       oceanColor: {type: 'vec3', value: new THREE.Color(this.planetColors.ocean)},
       landColor: {type: 'vec3', value: new THREE.Color(this.planetColors.land)},
       iceColor: {type: 'vec3', value: new THREE.Color(this.planetColors.ice)},
@@ -61,6 +68,7 @@ class Planet {
   getCloudMaterial = () => {
 
     let uniforms = {
+      pseudoSeed: {type: 'float', value: this.pseudoSeed},
       cloudColor: {type: 'vec3', value: new THREE.Color(0xffffff)},
       planetRadius : {type: 'float', value: this.radius},
       numIter: {type: 'int', value: this.noiseParams.numIter},
