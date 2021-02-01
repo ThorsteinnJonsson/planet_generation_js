@@ -221,7 +221,41 @@ function planetFragmentShader() {
   `;
 }
 
+
+function cloudVertexShader() {
+  
+  return `
+    varying vec3 pos;
+
+    void main() {
+      pos = position;
+      vec4 modelViewPosition = modelViewMatrix * vec4(position, 1.0);
+      gl_Position = projectionMatrix * modelViewPosition;
+    }
+  `;
+}
+
+
+function cloudFragmentShader() {
+  return `
+    varying vec3 pos;  
+  
+    ${planetGeometryUniforms}
+
+    ${simplex3dDeclaration}
+
+    void main() {
+      float alphaNoise = snoise(pos * 2.5 / planetRadius) + snoise(pos *2.0/ planetRadius);
+      float alphaVal = (alphaNoise > 0.75) ? 0.75 : 0.0; 
+      gl_FragColor = vec4( 1.0, 1.0, 1.0, alphaVal);
+    }
+  `;
+}
+
+
 export {
   planetVertexShader,
-  planetFragmentShader
+  planetFragmentShader,
+  cloudVertexShader,
+  cloudFragmentShader,
 }

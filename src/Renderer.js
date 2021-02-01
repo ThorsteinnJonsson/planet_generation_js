@@ -42,6 +42,7 @@ class Renderer extends Component {
 
 
     this.scene.add(this.planet.getMesh());
+    this.scene.add(this.planet.getCloudMesh());
   }
 
   componentDidMount() {

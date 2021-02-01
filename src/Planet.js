@@ -9,7 +9,9 @@ class Planet {
   constructor() {
     this.radius = 12742; // Earth's radius
 
-    this.icosphereMesh = null
+    this.icosphereMesh = null;
+    this.cloudSphere = null;
+
 
     this.noise = new Noise.Noise(Math.random());
     this.noiseParams = {
@@ -52,29 +54,56 @@ class Planet {
       uniforms: uniforms,
       vertexShader: SHADERS.planetVertexShader(),
       fragmentShader: SHADERS.planetFragmentShader(),
-      // wireframe:true,
-      // wireframeLinewidth: 5
     });
+    return material;
+  };
 
+  getCloudMaterial = () => {
 
+    let uniforms = {
+      cloudColor: {type: 'vec3', value: new THREE.Color(0xffffff)},
+      planetRadius : {type: 'float', value: this.radius},
+      numIter: {type: 'int', value: this.noiseParams.numIter},
+      noiseScale: {type: 'float', value: this.noiseParams.noiseScale},
+      persistence: {type: 'float', value: this.noiseParams.persistence},
+    };
+
+    let material = new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: SHADERS.cloudVertexShader(),
+      fragmentShader: SHADERS.cloudFragmentShader(),
+      opacity: 0.5,
+      transparent: true
+    });
     return material;
   };
 
   generate = (icoOrder = 5) => {
-    let geometry = generateIcosphereMesh(icoOrder, this.radius);
-    let material = this.getShaderMaterial();
-    
+    // Planet
+    const geometry = generateIcosphereMesh(icoOrder, this.radius);
+    const material = this.getShaderMaterial();
     this.icosphereMesh = new THREE.Mesh(geometry, material);
 
+    // Clouds
+    const cloudGeometry = new THREE.SphereGeometry( 1.1*this.radius, 32, 32 );
+    const cloudMaterial = this.getCloudMaterial();
+    this.cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
   };
 
   getMesh = () => {
     return this.icosphereMesh;
   };
 
+  getCloudMesh = () => {
+    return this.cloudSphere;
+  };
+
   rotate = () => {
     if (this.icosphereMesh) {
-      this.icosphereMesh.rotation.y += 0.001;
+      this.icosphereMesh.rotation.y += 0.0005;
+    }
+    if (this.cloudSphere){
+      this.cloudSphere.rotation.y += 0.00025;
     }
   }
 
