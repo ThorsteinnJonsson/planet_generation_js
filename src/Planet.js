@@ -25,12 +25,12 @@ class Planet {
     }
 
     this.planetColors = {
-      ocean: 0x005493,
-      land: 0x7da27e,
-      ice: 0xc5e0f5,
-      beach: 0xffdc7f,
-      mountain: 0x6b778a,
-      forest: 0x2e593c
+      ocean: options.oceanColor,
+      land: options.landColor,
+      ice: options.iceColor,
+      beach: options.beachColor,
+      mountain: options.mountainColor,
+      forest: options.forestColor
     }
 
   }
